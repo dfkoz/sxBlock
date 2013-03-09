@@ -2,7 +2,7 @@
   "name": "sxBlock",
   "version": "1.0",
   "manifest_version": 2,
-  "description": "Chrome extension to remove SXSW and other chafing tweets from your timeline.",
+  "description": "Chrome extension to remove chafing SXSW tweets from your timeline.",
   "icons": {
   	"128":"block_128.png",
   	"48":"block_48.png",
