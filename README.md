@@ -1,0 +1,1 @@
+This is the source code for a simple Chrome extension that hides all tweets that contain the phrase 'SXSW'. Comments and enhancements welcome.
