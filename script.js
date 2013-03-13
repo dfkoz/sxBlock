@@ -8,31 +8,35 @@ function scrubSXSW(toggled) {
 		
 		var isActive = response.isActive; 
 		
-		// If we are active, hide offending tweets no matter what. If we are inactive and just changed state,
-		// show the tweets. Otherwise, do nothing.
-		if (isActive) {		
-			$('*[data-item-type="tweet"]').each(function (i, d) { 
-				// Does this element have the text sxsw anywhere in it?
-				if ($(d).html().toLowerCase().indexOf('sxsw') > 0) {
-					// If so, hide or show the parent node.
-					$(d).css('display', 'none');
+		if (!isActive && !toggled) return; // Do nothing.
+		
+		var searchDict = [
+			{selector: '*[data-item-type="tweet"]', text: 'marketing'},
+			{selector: '.promoted-tweet', text: ''}
+		];
+		
+		for (var i = 0; i < searchDict.length; i++) {
+			
+			if (isActive) { style = 'none'; } // Filter is active. Hide the element.
+			else { style = 'list-item'} // Filter is now inactive, was active before. Show.
+			
+			// What elements are relevant to this selector?
+			var elems = $(searchDict[i].selector);
+			
+			for (var j = 0; j < elems.length; j++) {
+				// If we find the key text OR if there is no key text, apply the filter.
+				if (searchDict[i].text == '' || $(elems[j]).html().toLowerCase().indexOf(searchDict[i].text) > 0) {
+					$(elems[j]).css('display', style);
 					blocked_count++;
 				}
-			});			
-		} else if (!isActive && toggled) {
-			$('*[data-item-type="tweet"]').each(function (i, d) { 
-				// Does this element have the text sxsw anywhere in it?
-				if ($(d).html().toLowerCase().indexOf('sxsw') > 0) {
-					// If so, hide or show the parent node.
-					$(d).css('display', 'list-item');
-				}
-			});						
+			}
 		}
-		
+
 		// Finally, send a message to update the badge.
 		chrome.extension.sendMessage({action:'update_icon', ct: blocked_count});	
 	});
 }
+
 
 
 // Receive messages from background.js, eg, user turned extension off.
@@ -45,6 +49,8 @@ chrome.extension.onMessage.addListener(
 				break;		
 		}		
 });
+
+
 
 scrubSXSW(); // run once when the page loads.
 $('#timeline').click(scrubSXSW); // and bind an event to the timeline to catch updates.

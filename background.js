@@ -1,6 +1,6 @@
+var isActive = true;
 chrome.browserAction.setBadgeBackgroundColor({color: [0, 50, 200, 150]});
 chrome.browserAction.setBadgeText({text: "ON"});
-var isActive = true;
 
 // Process events from tabs.
 chrome.extension.onMessage.addListener(
@@ -17,6 +17,9 @@ chrome.extension.onMessage.addListener(
    				} else if (msg.ct > 0 ) {
 					chrome.browserAction.setBadgeText({text: msg.ct.toString()});
 					chrome.browserAction.setBadgeBackgroundColor({color: [0, 50, 200, 150]});	   	
+   				} else {
+   					chrome.browserAction.setBadgeBackgroundColor({color: [0, 50, 200, 150]});
+					chrome.browserAction.setBadgeText({text: "ON"});
    				}
    				
    				break;			
